@@ -1,0 +1,44 @@
+
+service: sls-vertx-api # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: java8
+
+# you can add packaging information here
+package:
+  artifact: target/sls-vertx-api-dev.jar
+
+functions:
+  users:
+    handler: sls.vertx.api.ServiceLauncher
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+      - http:
+          path: users
+          method: post
+          cors: true
+      - http:
+          path: users/{id}
+          method: put
+          cors: true
+      - http:
+          path: users/{id}
+          method: delete
+          cors: true
+      - http:
+          path: data/{yearmonth}
+          method: get
+          cors: true
+      - http:
+          path: loaddata/{yearmonth}
+          method: get
+          cors: true
+
