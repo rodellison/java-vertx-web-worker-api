@@ -6,12 +6,11 @@ that then get handled by long running processes.  Effectively, an order taking A
   
 _______________
 General Processing Flow
-1. VerticleLauncher started, creates verticles for each of the core handlers.
-2. FrontLine exposes a standard Vertx web handler Verticle which is the main verticle listening for 
-incoming URI event requests. Its job is to receive the request (an order in this case), and provide 
-the requestor a unique id (order, tracking, etc.). It also hand off parts of the order to 
-worker components who can work on their respective pieces of the order as long running processes.
-
+1. VerticleLauncher started, creates all worker and standard verticles.
+2. A standard Vertx web handler Verticle listens for incoming requests. 
+3. The handler listens for various URI and upon receipt, starts a few CompletableFutures to vertx messagebus
+send the respective parts of the posted request to other vertx workers.   
+4. CompetableFutures, using .allOf/.whenComplete, join the replies from the Workers to signify completion.
 
 ___
 For this project, a '**coffee-shop**' flow is simulated..
